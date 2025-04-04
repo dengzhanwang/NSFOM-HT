@@ -8,7 +8,7 @@ This repository contains two main components for the NSFOM-HT project:
 
 ## Repository Structure
 
-### bimodal_EXPS/
+### bimodal_exps/
 ```
 ├── __pycache__/         # Python cache directory
 ├── dataset/             # Contains datasets for model training/testing
