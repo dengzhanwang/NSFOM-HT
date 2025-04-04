@@ -39,7 +39,7 @@ This repository contains two main components for the NSFOM-HT project:
 
 ### Data fitting problem:
 $$
-\min_{x\in\mathbb{R}^n}  f(x) = \sum_{i=1}^m \|s(a_i^Tx)-b_i\|^2,
+\min_{x\in\mathbb{R}^n}  f(x) = \sum_{i=1}^m \left\|s(a_i^Tx)-b_i\right\|^2,
 $$
 
 where $\phi(t)=t^2/(1+t^2)$ is a robust loss function \cite{carmon2017convex,he2023newton}, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\mathbb{R}^n\times\mathbb{R}$ is the training set. 
