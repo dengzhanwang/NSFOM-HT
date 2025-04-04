@@ -31,7 +31,7 @@ This repository contains two main components for the NSFOM-HT project:
 ## Getting Started
 
 ### Prerequisites
- - Python 3.x (for bimodal_EXPS)
+ - Python 3.x (for bimodal_exps)
  - MATLAB (for regression scripts)
 
 
