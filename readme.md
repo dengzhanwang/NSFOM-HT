@@ -90,7 +90,7 @@ run mem_roubst_reg.m
 ### Neural network training with multimodal data:
 
 The heavy tail noise pheromone has been widely proven in Natural Language processing. However, it is few discussed in multimodal model pretraining
-In this subsection, we consider a neural network problem with multimodal data. Formally, during training, consider a batch of $ N $ image-caption pairs, $ \{(I_j, T_j)\}_{j=1}^N $, where $ I_j $ and $ T_j $ represent the raw image and text pair, respectively. The image embedding $ I_j \in \mathbb{R}^d $ and text embedding $ T_j \in \mathbb{R}^d $ are obtained by passing $ I_j $ and $ T_j $ through the image encoder $ f_I $ and text encoder $ f_T $, respectively; i.e.,
+In this subsection, we consider a neural network problem with multimodal data. Formally, during training, consider a batch of $N$ image-caption pairs, $(I_j, T_j)_{j=1}^N$, where $I_j$ and $T_j$ represent the raw image and text pair, respectively. The image embedding $ I_j \in \mathbb{R}^d $ and text embedding $ T_j \in \mathbb{R}^d $ are obtained by passing $ I_j $ and $ T_j $ through the image encoder $ f_I $ and text encoder $ f_T $, respectively; i.e.,
 $I_j^e = f_{I_\theta}(I_j) \quad \text{and} \quad T_j^e = f_{T_\theta}(T_j).$
 
 
