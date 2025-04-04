@@ -89,21 +89,21 @@ run mem_roubst_reg.m
 
 ### Neural network training with multimodal data:
 
-The heavy tail noise pheromone has been widely proven in Natural Language processing. However, it is few discussed in multimodal model pretraining
-In this subsection, we consider a neural network problem with multimodal data. Formally, during training, consider a batch of $N$ image-caption pairs, $(I_j, T_j)_{j=1}^N$, where $I_j$ and $T_j$ represent the raw image and text pair, respectively. The image embedding $ I_j \in \mathbb{R}^d $ and text embedding $ T_j \in \mathbb{R}^d $ are obtained by passing $ I_j $ and $ T_j $ through the image encoder $ f_I $ and text encoder $ f_T $, respectively; i.e.,
-$I_j^e = f_{I_\theta}(I_j) \quad \text{and} \quad T_j^e = f_{T_\theta}(T_j).$
+The heavy tail noise phenomenon has been widely demonstrated in natural language processing, yet it remains under-explored in multimodal model pretraining.
+
+In this subsection, we address a neural network problem involving multimodal data. Specifically, consider a training batch of \( N \) image-caption pairs \( \{(I_j, T_j)\}_{j=1}^N \), where \( I_j \) and \( T_j \) represent the raw image and text, respectively. Image embeddings \( I_j^e \in \mathbb{R}^d \) and text embeddings \( T_j^e \in \mathbb{R}^d \) are computed by passing \( I_j \) and \( T_j \) through respective encoders \( f_{I_\theta} \) and \( f_{T_\theta} \):
+
+\[
+I_j^e = f_{I_\theta}(I_j), \quad T_j^e = f_{T_\theta}(T_j).
+\]
+
+The contrastive objective used in CLIP aims to align image and text embeddings by minimizing the following loss function \( \mathcal{L}_{\text{CLIP}} \):
+
+\[
+\mathcal{L}_{\text{CLIP}} = -\frac{1}{2N} \sum_{j=1}^{N} \left[ \log \frac{\exp(\langle I_j^e, T_j^e \rangle / \tau)}{\sum_{k=1}^{N} \exp(\langle I_j^e, T_k^e \rangle / \tau)} + \log \frac{\exp(\langle I_j^e, T_j^e \rangle / \tau)}{\sum_{k=1}^{N} \exp(\langle I_k^e, T_j^e \rangle / \tau)} \right]
+\]
 
 
-The contrastive objective in CLIP aims to align the image and text representations by minimizing the loss function $ \mathcal{L}_{\text{CLIP}} $ shown below:
-
-$$
-\mathcal{L}_{CLIP} = -\frac{1}{2N} \sum_{j=1}^{N} \left[ 
-\log \frac{e^{\langle I_j^e, T_j^e \rangle / \tau}}
-{\sum_{k=1}^{N} e^{\langle I_j^e, T_k^e \rangle / \tau}} + 
-\log \frac{e^{\langle I_j^e, T_j^e \rangle / \tau}}
-{\sum_{k=1}^{N} e^{\langle I_k^e, T_j^e \rangle / \tau}}
-\right]
-$$
 
 where $\langle \cdot, \cdot \rangle$ represents the inner product, and $\tau$ is a trainable temperature parameter. 
 
