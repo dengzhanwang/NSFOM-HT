@@ -1,153 +1,128 @@
-# Stochastic Interior-Point Methods for Smooth Conic Optimization with Applications
+# Normalized stochastic first-order methods with momentum under heavy-tailed noise
+This repository contains the implementation code for the paper "Complexity of normalized stochastic first-order methods with momentum under heavy-tailed noise".  The code implements stochastic interior-point methods with a focus on data fitting problem, robust regression problem, and neural network training with multimodal data.
+## Project Overview
 
-This repository contains the implementation code for the paper "Stochastic Interior-Point Methods for Smooth Conic Optimization with Applications". The code implements stochastic interior-point methods for solving smooth conic optimization problems, with a focus on semidefinite programming (SDP) and multi-task optimization applications.
-
-## Code Summary
-
-This implementation serves two main purposes:
-1. To reproduce the experimental results presented in our paper on Stochastic Interior-Point Methods
-2. To provide a practical implementation of stochastic IPM algorithms for smooth conic optimization problems
+This repository contains two main components for the NSFOM-HT project:
+1. `bimodal_exps/` - Bimodal experiments module
+2. `regression/` - Regression analysis module
 
 ## Repository Structure
 
+### bimodal_EXPS/
 ```
-.
-├── SDPT3-4.0/           # Third-party solver package required for comparison
-├── base/                # Core implementation files for SIPM algorithms
-├── data/               # Dataset files for experiments
-├── result/             # Directory for storing experimental results
-├── src/                # Source code for main implementations
-├── Test_SDP.m         # Main script for SDP experiments
-├── Test_socp.m        # Script for SOCP experiments
-├── Test_socp2.m       # Additional SOCP test script
-├── multi_task.m       # Script for multi-task optimization experiments
-└── readme.md          # Documentation file
+├── __pycache__/         # Python cache directory
+├── dataset/             # Contains datasets for model training/testing
+├── models/              # Machine learning model definitions and training code
+├── optim/               # Optimization algorithms and strategies
+├── scheduler/           # Task scheduling and planning code
+├── clip_heavy.py        # Script for complex computations/processing
+├── noise_test.py        # Script for noise-related testing
+└── utils.py             # Utility functions and helper code
 ```
 
-### Directory Details:
-- `base/`: Contains the fundamental implementations of the SIPM algorithms
-- `data/`: Stores test datasets and benchmark problems
-- `src/`: Contains the source code for main algorithm implementations
-- `result/`: Stores experimental outputs and analysis results
-- `SDPT3-4.0/`: Contains the SDPT3 solver package used for comparison
+### regression/
+```
+├── data/                # Data files for regression analysis
+├── result/              # Output directory for regression results
+├── mem_reg.m            # Memory regression script
+└── mem_roubst_reg.m     # Robust memory regression script
+```
 
-## Requirements
+## Getting Started
 
-- MATLAB (R2019b or later recommended)
+### Prerequisites
+• Python 3.x (for bimodal_EXPS)
+• MATLAB (for regression scripts)
+
 
 ## How to Run the Code
 
-### For clustering data streams problems:
+### Data fitting problem:
 $$
-\min_{W\in\mathbb{R}^{d\times d}} \frac{1}{p}\sum_{i=1}^p\{ A_i,W\} + \tau\sum_{i=1}^d\ln(\gamma +\lambda_i(W))\ \ \mathrm{s.t.}\ \ W\in\mathbb{S}^{d}_+,\ \ We_d = e_d,\ \ \langle I_d,W\rangle=k,
+\min_{x\in\R^n}  \Big\{f(x) = \sum_{i=1}^m \|s(a_i^Tx)-b_i\|^2\Big\},
 $$
 
-where $\{A_i\}_{i=1}^p$ are computed from data streams, $\tau\sum_{i=1}^d\ln(\gamma +\lambda_i(W))$ is a nonconvex regularizer that imposes low rankness, with $\tau$ and $\gamma$ as tuning parameters, and $e_d$ and $I_d$ denote the $d$-dimensional  all-one vector and the $d\times d$ identity matrix, respectively.
-
+where $\phi(t)=t^2/(1+t^2)$ is a robust loss function \cite{carmon2017convex,he2023newton}, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\R^n\times\R$ is the training set. 
 1. Start MATLAB
 2. Navigate to the repository root directory
 3. Run the following command:
 ```matlab
-run Test_SDP.m
+run mem_reg.m
 ```
 
 #### Results
 <div style="display: flex; justify-content: space-around;">
-  <img src="./result/SDP222_ferror500covtype50.png" alt="图片1" width="200" />
-
-  <img src="./result/SDP222_error500covtype50.png" alt="图片2" width="200" />
-
-  <img src="./result/SDP222_ferror500spambase50.png" alt="图片3" width="200" />
-
-  <img src="./result/SDP222_error500spambase50.png" alt="图片4" width="200" />
-
+  <img src="./regression/result/mem_reg_all.png" alt="图片1" width="800" />
 </div>
 
-<center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Convergence behavior of the relative objective value and average relative stationary</center>
+<center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Convergence behavior of the relative objective value and relative gradient norm</center>
 
 
 
-<br><br>
 
-<div style="display: flex; justify-content: space-around;">
-  <img src="./result/SDP222_cluster1500covtype50.png" alt="图片1" width="200" />
-  <img src="./result/SDP222_cluster333500covtype50.png" alt="图片2" width="200" />
-  <img src="./result/SDP222_cluster666500covtype50.png" alt="图片3" width="200" />
-  <img src="./result/SDP222_cluster1000500covtype50.png" alt="图片4" width="200" />
-</div>
-
-<center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clustering results at the
-1st, 333rd, 666th, and 1000th data observation</center>
-
-
-### For robust learning with chance constraints:
+### Robust regression problem
 
 $$
-\min_{w\in\mathbb{R}^d,\theta,v\ge 0}  \frac{1}{p}\sum_{i=1}^p\phi(w^Ta_i - b_i) + \lambda_1\theta + \lambda_2 v\quad\mathrm{s.t.}\quad (w,v)\in \mathbb{Q}^{d+1},\quad (\Sigma^{1/2}w,\sqrt{\eta}\theta)\in \mathbb{Q}^{d+1},
+\min_{x\in\R^n}  \Big\{f(x) = \sum_{i=1}^m \phi(a_i^Tx-b_i)\Big\},
 $$
-
-where $\phi(\cdot)$ is the loss, $\lambda_1,\lambda_2>0$ are tuning parameters, and $\mathbb{Q}^{d+1}\doteq\{(u,t)\in\mathbb{R}^d\times\mathbb{R}_+:\|u\|\le t\}$ denotes the second-order cone.
+where $\phi(t)=t^2/(1+t^2)$ is a robust loss function, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\R^n\times\R$ is the training set. 
 1. Start MATLAB
 2. Navigate to the repository root directory
 3. Execute either:
 ```matlab
-run Test_socp.m
-```
-or
-```matlab
-run Test_socp2.m
+run mem_roubst_reg.m
 ```
 
 #### Results
 <div style="display: flex; justify-content: space-around;">
-  <img src="./result/SOCP_ferror10000covtype500.png" alt="图片1" width="200" />
-  <img src="./result/SOCP_error10000covtype500.png" alt="图片2" width="200" />
-  <img src="./result/SOCP_ferror4000winequality-white200.png" alt="图片3" width="200" />
-  <img src="./result/SOCP_error4000winequality-white200.png" alt="图片4" width="200" />
+  <img src="./regression/result/mem_robust_reg_all.png" alt="图片1" width="800" />
 </div>
-<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Convergence behavior of the relative objective value and average relative stationary</p>
+<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Convergence behavior of the relative objective value and relative gradient norm</p>
 <br><br>
 
-### For multi-task optimization problems:
+<div style="display: flex; justify-content: space-around;">
+  <img src="./regression/result/all_datasets_combined.png" alt="图片1" width="800" />
+</div>
+<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gradient error and Lipschitz constant of different datasets.</p>
+<br><br>
+
+### Neural network training with multimodal data:
+
+The heavy tail noise pheromone has been widely proven in Natural Language processing. However, it is few discussed in multimodal model pretraining
+In this subsection, we consider a neural network problem with multimodal data. Formally, during training, consider a batch of $ N $ image-caption pairs, $ \{(I_j, T_j)\}_{j=1}^N $, where $ I_j $ and $ T_j $ represent the raw image and text pair, respectively. The image embedding $ I_j \in \mathbb{R}^d $ and text embedding $ T_j \in \mathbb{R}^d $ are obtained by passing $ I_j $ and $ T_j $ through the image encoder $ f_I $ and text encoder $ f_T $, respectively; i.e.,
+$I_j^e = f_{I_\theta}(I_j) \quad \text{and} \quad T_j^e = f_{T_\theta}(T_j).$
+
+
+The contrastive objective in CLIP aims to align the image and text representations by minimizing the loss function $ \mathcal{L}_{\text{CLIP}} $ shown below:
+
 $$
-\min_{W\in\mathbb{R}^{p\times d},\Sigma\in\mathbb{R}^{p\times p}}\frac{1}{p}\sum_{i=1}^p \frac{1}{m} \sum_{j=1}^{m}\ell(w_i,a_{ij}) + \lambda\mathrm{tr}(W^TP(\Sigma)W) \quad \mathrm{s.t.}\quad \Sigma\in\mathbb{S}_+^p,\quad \mathrm{tr}(\Sigma)=1,  
+\mathcal{L}_{\text{CLIP}} = -\frac{1}{2N} \sum_{j=1}^{N} \left[ 
+\log \frac{\exp \left( \langle I_j^e, T_j^e \rangle / \tau \right)}
+{\sum\limits_{k=1}^{N} \exp \left( \langle I_j^e, T_k^e \rangle / \tau \right)} + \log \frac{\exp \left( \langle I_j^e, T_j^e \rangle / \tau \right)}
+{\sum\limits_{k=1}^{N} \exp \left( \langle I_k^e, T_j^e \rangle / \tau \right)}
+\right]
 $$
 
-where $W = [w_1, \ldots, w_p]^T$, $\mathbb{S}^p_+$ denotes the positive semidefinite cone, $\ell(\cdot, \cdot)$ is the loss function, $w_i$ and $\{a_{ij}\}_{j=1}^{m}$ are respectively the model weight and the training set for the $i$th task, $1 \le i \le p$, $\lambda>0$ is a tuning parameter, $P : \mathbb{R}^{p \times p} \to \mathbb{R}^{p \times p}$ is a given map that controls the interaction between $W$ and $\Omega$, and $\mathrm{tr}(\cdot)$ denotes the trace of a matrix.
+where $\langle \cdot, \cdot \rangle$ represents the inner product, and $\tau$ is a trainable temperature parameter. 
 
 1. Start MATLAB
 2. Navigate to the repository root directory
 3. Execute:
-```matlab
-run multi_task.m
+```bash
+python clip_heavy.py  
 ```
 
 #### Results
 <div style="display: flex; justify-content: space-around;">
-  <img src="./result/SDP_multitask_ferror1500500.png" alt="图片1" width="200" />
-  <img src="./result/SDP_multitask_error1500500.png" alt="图片2" width="200" />
-  <img src="./result/SDP_multitask_ferror2500500.png" alt="图片3" width="200" />
-  <img src="./result/SDP_multitask_error2500500.png" alt="图片4" width="200" />
+  <img src="./bimodal_exps/figures/multimodal_combined_2x3_plot.png" alt="图片1" width="800" />
 </div>
-<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Convergence behavior of the relative objective value and average relative stationary</p>
+<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Convergence behavior of the relative objective value and relative gradient norm</p>
 <br><br>
 
 <div style="display: flex; justify-content: space-around;">
-  <img src="./result/multitask_train.png" alt="图片1" width="400" />
-  <img src="./result/multitask_train.png" alt="图片2" width="400" />
+  <img src="./bimodal_exps/figures/combined_noise_histogram_qq_all.png" alt="图片1" width="800" />
 </div>
 
-<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loss per task for the training (left five) and validation (right five) datasets</p>
+<p style="text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gradient noise and Lipschitz constant of different datasets</p>
 <br><br>
-
-### Experiment Configuration
-- Modify parameters in the respective .m files to adjust experimental settings
-- Results will be automatically saved in the `result/` directory
-- For custom datasets, place them in the `data/` directory and modify the data loading path in the scripts accordingly
-
-## Notes
-- All codes are implemented in MATLAB, so no compilation is necessary
-- Make sure all paths are properly set before running experiments
-- Check the `result/` directory for output files after running experiments
-
 
