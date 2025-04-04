@@ -31,18 +31,18 @@ This repository contains two main components for the NSFOM-HT project:
 ## Getting Started
 
 ### Prerequisites
-• Python 3.x (for bimodal_EXPS)
-• MATLAB (for regression scripts)
+ - Python 3.x (for bimodal_EXPS)
+ - MATLAB (for regression scripts)
 
 
 ## How to Run the Code
 
 ### Data fitting problem:
 $$
-\min_{x\in\R^n}  \left \{f(x) = \sum_{i=1}^m \|s(a_i^Tx)-b_i\|^2\right \},
+\min_{x\in\R^n}  f(x) = \sum_{i=1}^m \|s(a_i^Tx)-b_i\|^2,
 $$
 
-where $\phi(t)=t^2/(1+t^2)$ is a robust loss function \cite{carmon2017convex,he2023newton}, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\R^n\times\R$ is the training set. 
+where $\phi(t)=t^2/(1+t^2)$ is a robust loss function \cite{carmon2017convex,he2023newton}, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\mathbb{R}^n\times\mathbb{R}$ is the training set. 
 1. Start MATLAB
 2. Navigate to the repository root directory
 3. Run the following command:
@@ -63,9 +63,9 @@ run mem_reg.m
 ### Robust regression problem
 
 $$
-\min_{x\in\R^n}  \left\{f(x) = \sum_{i=1}^m \phi(a_i^Tx-b_i)\right\},
+\min_{x\in\R^n}  f(x) = \sum_{i=1}^m \phi(a_i^Tx-b_i),
 $$
-where $\phi(t)=t^2/(1+t^2)$ is a robust loss function, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\R^n\times\R$ is the training set. 
+where $\phi(t)=t^2/(1+t^2)$ is a robust loss function, and $\{(a_i,b_i)\}_{1\le i\le m}\subset\mathbb{R}^n\times\mathbb{R}$ is the training set. 
 1. Start MATLAB
 2. Navigate to the repository root directory
 3. Execute either:
