@@ -97,11 +97,11 @@ $I_j^e = f_{I_\theta}(I_j) \quad \text{and} \quad T_j^e = f_{T_\theta}(T_j).$
 The contrastive objective in CLIP aims to align the image and text representations by minimizing the loss function $ \mathcal{L}_{\text{CLIP}} $ shown below:
 
 $$
-\mathcal{L}_{\text{CLIP}} = -\frac{1}{2N} \sum_{j=1}^{N} \left[ 
-\log \frac{\exp \left( \langle I_j^e, T_j^e \rangle / \tau \right)}
-{\sum\limits_{k=1}^{N} \exp \left( \langle I_j^e, T_k^e \rangle / \tau \right)} + \log \frac{\exp \left( \langle I_j^e, T_j^e \rangle / \tau \right)}
-{\sum\limits_{k=1}^{N} \exp \left( \langle I_k^e, T_j^e \rangle / \tau \right)}
-\right]
+\mathcal{L}_{\rm CLIP} = -\frac{1}{2N} \sum_{j=1}^{N} \Bigg[ 
+\log \frac{\exp \big( \langle I_j^e, T_j^e \rangle / \tau \big)}
+{\sum_{k=1}^{N} \exp \big( \langle I_j^e, T_k^e \rangle / \tau \big)} + \log \frac{\exp \big( \langle I_j^e, T_j^e \rangle / \tau \big)}
+{\sum_{k=1}^{N} \exp \big( \langle I_k^e, T_j^e \rangle / \tau \big)}
+\Bigg]
 $$
 
 where $\langle \cdot, \cdot \rangle$ represents the inner product, and $\tau$ is a trainable temperature parameter. 
