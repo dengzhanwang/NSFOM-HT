@@ -186,5 +186,4 @@ def _single_tensor_sgd(params: List[Tensor],
                 d_p = d_p.add(buf, alpha=momentum)
             else:
                 d_p = buf
-        lr2 = lr + 0.0001/(1-0.0001)
-        param.add_(d_p, alpha=-lr2)
+        param.add_(d_p, alpha=-lr)
